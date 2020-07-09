@@ -9,9 +9,7 @@ targetCompatibility = "7"
 
 
 dependencies {
-    implementation project(":BankingUiCommon")
-
-    implementation "net.dankito.search:lucene-4-utils:$luceneUtilsVersion"
+    api project(":BankingUiCommon")
 
 
     testImplementation "org.junit.jupiter:junit-jupiter:$junit5Version"
@@ -20,4 +18,18 @@ dependencies {
     testImplementation "org.assertj:assertj-core:$assertJVersion"
     testImplementation "org.mockito:mockito-core:$mockitoVersion"
 
+}
+
+
+task jarTest (type: Jar) {
+    from sourceSets.test.output
+    classifier = 'test'
+}
+
+configurations {
+    testOutput
+}
+
+artifacts {
+    testOutput jarTest
 }
