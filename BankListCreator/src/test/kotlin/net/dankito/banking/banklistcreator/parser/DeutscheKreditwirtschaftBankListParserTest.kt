@@ -4,7 +4,6 @@ import net.dankito.banking.banklistcreator.TestConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Ignore
 import org.junit.Test
-import java.io.File
 
 
 @Ignore // not an automatic test, set your path to your bank list file in TestConfig.DeutscheKreditwirtschaftBankListXlsxFile
