@@ -1,7 +1,7 @@
 package net.dankito.banking.bankfinder
 
-import net.dankito.utils.multiplatform.log.LoggerFactory
 import net.dankito.utils.serialization.JacksonJsonSerializer
+import org.slf4j.LoggerFactory
 
 
 actual class BankListDeserializer {
@@ -9,7 +9,7 @@ actual class BankListDeserializer {
     companion object {
         const val BankListFileName = "BankList.json"
 
-        private val log = LoggerFactory.getLogger(BankListDeserializer::class)
+        private val log = LoggerFactory.getLogger(BankListDeserializer::class.java)
     }
 
 
@@ -21,7 +21,7 @@ actual class BankListDeserializer {
                 return it
             }
         } catch (e: Exception) {
-            log.error(e) { "Could not load bank list" }
+            log.error("Could not load bank list", e)
         }
 
         return listOf()

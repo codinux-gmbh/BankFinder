@@ -1,0 +1,19 @@
+pluginManagement {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+
+include "BankFinder"
+findProject(":BankFinder")?.projectDir = file("tools/BankFinder")
+findProject(":BankFinder")?.name = "BankFinder"
+
+include "LuceneBankFinder"
+findProject(":LuceneBankFinder")?.projectDir = file("tools/LuceneBankFinder")
+findProject(":LuceneBankFinder")?.name = "LuceneBankFinder"
+
+include "BankListCreator"
+findProject(":BankListCreator")?.projectDir = file("tools/BankListCreator")
+findProject(":BankListCreator")?.name = "BankListCreator"

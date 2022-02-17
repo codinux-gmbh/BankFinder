@@ -17,8 +17,8 @@ dependencies {
     // TODO: enable to reference BankFinder tests again to run LuceneBankFinderTest
 //    testImplementation project(path: ':BankFinder', configuration: 'testOutput')
 
-    testImplementation "org.junit.jupiter:junit-jupiter:$junit5Version"
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit5Version"
+    testImplementation "org.junit.jupiter:junit-jupiter:$junitVersion"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
 
     testImplementation "org.assertj:assertj-core:$assertJVersion"
     testImplementation "org.mockito:mockito-core:$mockitoVersion"

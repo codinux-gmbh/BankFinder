@@ -1,0 +1,38 @@
+
+buildscript {
+    repositories {
+        mavenCentral()
+        google()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+    }
+}
+
+
+def commonScriptsFile = new File(new File(project.gradle.gradleUserHomeDir, "scripts"), "commonScripts.gradle")
+if (commonScriptsFile.exists()) {
+    apply from: commonScriptsFile
+}
+
+
+allprojects {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        google()
+    }
+
+    group 'net.codinux.banking'
+    version "1.0.0-SNAPSHOT"
+}
+
+
+
+task jarAll {
+    dependsOn = [
+            "BankFinder:jvmJar",
+            "LuceneBankFinder:jvmJar"
+    ]
+}
