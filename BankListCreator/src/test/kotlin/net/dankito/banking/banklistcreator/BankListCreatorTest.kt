@@ -20,7 +20,8 @@ class BankListCreatorTest {
             TestConfig.DeutscheKreditwirtschaftBankListXlsxFile,
             File("../BankFinder/src/commonMain/resources/DetailedBankList.json"),
             File("../BankFinder/src/commonMain/resources/BankList.json"),
-            BankListPrettifierOption.values().toList()
+            BankListPrettifierOption.values().toList(),
+            File("../../fints4k/fints4k/src/commonMain/kotlin/net/dankito/banking/fints/util/FinTsServerAddressFinder.kt")
         )
     }
 
