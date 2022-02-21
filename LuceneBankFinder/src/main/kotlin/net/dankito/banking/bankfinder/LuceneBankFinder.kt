@@ -90,7 +90,7 @@ open class LuceneBankFinder(indexFolder: File) : BankFinderBase(), IBankFinder {
             return it.findBankByNameBankCodeOrCity(query)
         }
 
-        val luceneQuery = queries.createQueriesForSingleTerms(query.toLowerCase()) { singleTerm ->
+        val luceneQuery = queries.createQueriesForSingleTerms(query.lowercase()) { singleTerm ->
             listOf(
                 queries.fulltextQuery(BankInfoNameFieldName, singleTerm),
                 queries.startsWith(BankInfoCityIndexedFieldName, singleTerm),
