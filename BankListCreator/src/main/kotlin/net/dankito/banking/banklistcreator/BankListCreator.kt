@@ -31,7 +31,7 @@ open class BankListCreator @JvmOverloads constructor(
     open fun createDetailedAndPrettifiedBankListFromDeutscheKreditwirtschaftXlsxFile(
         deutscheKreditwirtschaftXlsxFile: File, detailedBankListOutputFile: File,
         prettifiedBankListOutputFile: File, prettifyOptions: List<BankListPrettifierOption>,
-        finTsServerAddressFinderOutputFile: File? = null) {
+        finTsServerAddressFinderOutputFile: File? = null, bicFinderOutputFile: File? = null) {
 
         val allBanks = parser.parse(deutscheKreditwirtschaftXlsxFile)
 
@@ -45,6 +45,10 @@ open class BankListCreator @JvmOverloads constructor(
 
         finTsServerAddressFinderOutputFile?.let {
             createFinTsServerAddressFinder(allBanks, it)
+        }
+
+        bicFinderOutputFile?.let {
+            createBicFinder(allBanks, it)
         }
     }
 
@@ -81,11 +85,46 @@ open class BankListCreator @JvmOverloads constructor(
         writer.appendLine("\t)")
         writer.newLine()
 
-        writer.appendLine("}")
+        writer.append("}")
 
         writer.close()
 
         log.info("Wrote FinTsServerAddressFinder class to $finTsServerAddressFinderOutputFile")
+    }
+
+    private fun createBicFinder(allBanks: List<DetailedBankInfo>, bicFinderOutputFile: File) {
+        val bicByBankCode = allBanks.filterNot { it.bic.isNullOrBlank() }.associate { it.bankCode to it.bic }
+
+        bicFinderOutputFile.parentFile.mkdirs()
+
+        val writer = bicFinderOutputFile.bufferedWriter()
+
+        writer.appendLine("package net.dankito.banking.fints.util")
+        writer.newLine()
+
+        writer.appendLine("open class BicFinder {")
+        writer.newLine()
+
+        writer.appendLine("\topen fun findBic(bankCode: String): String? {")
+        writer.appendLine("\t\treturn bicByBankCode[bankCode]")
+        writer.appendLine("\t}")
+        writer.newLine()
+        writer.newLine()
+
+        writer.appendLine("\tprotected open val bicByBankCode: Map<String, String> = mapOf(")
+
+        bicByBankCode.forEach { bankCode, bic ->
+            writer.appendLine("\t\t\"$bankCode\" to \"$bic\",")
+        }
+
+        writer.appendLine("\t)")
+        writer.newLine()
+
+        writer.append("}")
+
+        writer.close()
+
+        log.info("Wrote BicFinder class to $bicByBankCode")
     }
 
 }
