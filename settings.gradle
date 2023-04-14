@@ -3,6 +3,12 @@ pluginManagement {
         mavenCentral()
         gradlePluginPortal()
     }
+
+    plugins {
+        id("io.quarkus") version quarkusVersion
+        id("org.jetbrains.kotlin.jvm") version "$kotlinVersion"
+        id("org.jetbrains.kotlin.plugin.allopen") version "$kotlinVersion"
+    }
 }
 
 
@@ -11,3 +17,5 @@ include "BankFinder"
 include "LuceneBankFinder"
 
 include "BankListCreator"
+
+include "BankFinderRest"
