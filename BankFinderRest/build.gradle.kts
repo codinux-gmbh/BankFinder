@@ -45,15 +45,13 @@ dependencies {
 group = "net.dankito.banking"
 version = "1.0.0-SNAPSHOT"
 
-val javaVersion = JavaVersion.VERSION_11
-
 java {
-    sourceCompatibility = javaVersion
-    targetCompatibility = javaVersion
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    kotlinOptions.jvmTarget = javaVersion.toString()
     kotlinOptions.javaParameters = true
 }
 
@@ -63,8 +61,8 @@ tasks.withType<Test> {
 }
 allOpen {
     annotation("jakarta.ws.rs.Path")
-    annotation("javax.inject.Inject")
-    annotation("javax.inject.Singleton")
+    annotation("jakarta.inject.Inject")
+    annotation("jakarta.inject.Singleton")
     annotation("jakarta.enterprise.context.ApplicationScoped")
     annotation("io.quarkus.test.junit.QuarkusTest")
 }
