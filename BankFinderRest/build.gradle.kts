@@ -11,14 +11,6 @@ repositories {
 val quarkusVersion: String by project
 val lokiLoggerVersion: String by project
 
-configurations.all {
-    resolutionStrategy {
-        // Quarkus overrides OkHttp version 4.x of LokiLogger with incompatible OkHttp version 3.x
-        force("com.squareup.okhttp3:okhttp:4.11.0")
-        force("com.squareup.okio:okio:3.4.0")
-    }
-}
-
 dependencies {
     implementation(enforcedPlatform("io.quarkus.platform:quarkus-bom:$quarkusVersion"))
     implementation("io.quarkus:quarkus-kotlin")
@@ -35,7 +27,7 @@ dependencies {
 
     implementation("net.codinux.log:quarkus-loki-logger:$lokiLoggerVersion")
     implementation("net.codinux.log.kubernetes:codinux-kubernetes-info-retriever:$lokiLoggerVersion")
-    implementation("net.codinux.log:kmp-log:1.1.2")
+    implementation("net.codinux.log:kmp-log:1.1.3")
 
     testImplementation("io.quarkus:quarkus-junit5")
     testImplementation("io.rest-assured:rest-assured")
