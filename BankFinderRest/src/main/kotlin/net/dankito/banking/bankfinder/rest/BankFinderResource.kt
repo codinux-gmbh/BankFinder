@@ -1,8 +1,8 @@
 package net.dankito.banking.bankfinder.rest
 
+import io.quarkus.runtime.annotations.RegisterForReflection
 import net.dankito.banking.bankfinder.BankInfo
 import net.dankito.banking.bankfinder.InMemoryBankFinder
-import org.jboss.resteasy.annotations.jaxrs.PathParam
 import jakarta.ws.rs.GET
 import jakarta.ws.rs.Path
 import jakarta.ws.rs.Produces
@@ -11,6 +11,7 @@ import jakarta.ws.rs.core.MediaType
 
 
 @Path("/bankfinder")
+@RegisterForReflection(targets = [ BankInfo::class ])
 class BankFinderResource {
 
     protected var bankFinder = InMemoryBankFinder()
