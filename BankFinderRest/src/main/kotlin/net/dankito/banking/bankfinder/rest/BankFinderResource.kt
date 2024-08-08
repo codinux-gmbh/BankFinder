@@ -18,8 +18,7 @@ class BankFinderResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("{query}")
-    fun findBank(@PathParam query: String, @QueryParam("maxItems") maxItems: Int? = null): List<BankInfo> =
+    fun findBank(@QueryParam("query") query: String? = null, @QueryParam("maxItems") maxItems: Int? = null): List<BankInfo> =
         bankFinder.findBankByNameBankCodeOrCity(query, maxItems)
 
 }
