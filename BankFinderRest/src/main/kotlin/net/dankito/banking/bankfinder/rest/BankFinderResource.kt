@@ -6,6 +6,7 @@ import org.jboss.resteasy.annotations.jaxrs.PathParam
 import jakarta.ws.rs.GET
 import jakarta.ws.rs.Path
 import jakarta.ws.rs.Produces
+import jakarta.ws.rs.QueryParam
 import jakarta.ws.rs.core.MediaType
 
 
@@ -18,8 +19,7 @@ class BankFinderResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{query}")
-    fun findBank(@PathParam query: String): List<BankInfo> {
-        return bankFinder.findBankByNameBankCodeOrCity(query)
-    }
+    fun findBank(@PathParam query: String, @QueryParam("maxItems") maxItems: Int? = null): List<BankInfo> =
+        bankFinder.findBankByNameBankCodeOrCity(query, maxItems)
 
 }

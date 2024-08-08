@@ -11,20 +11,22 @@ open class InMemoryBankFinder() : BankFinderBase(), IBankFinder {
     protected var bankListField: List<BankInfo>? = null
 
 
-    override fun findBankByBankCode(query: String): List<BankInfo> {
+    override fun findBankByBankCode(query: String, maxItems: Int?): List<BankInfo> {
         if (query.isEmpty()) {
-            return getBankList()
+            return getBankList(maxItems)
         }
 
         return getBankList().filter { it.bankCode.startsWith(query) }
+            .max(maxItems) // TODO: stream
     }
 
-    override fun findBankByNameBankCodeOrCityForNonEmptyQuery(query: String): List<BankInfo> {
+    override fun findBankByNameBankCodeOrCityForNonEmptyQuery(query: String, maxItems: Int?): List<BankInfo> {
         val queryPartsLowerCase = query.lowercase().split(" ", "-")
 
         return getBankList().filter { bankInfo ->
             checkIfAllQueryPartsMatchBankNameBankCodeOrCity(queryPartsLowerCase, bankInfo)
         }
+            .max(maxItems) // TODO: stream
     }
 
     protected open fun checkIfAllQueryPartsMatchBankNameBankCodeOrCity(queryPartsLowerCase: List<String>, bankInfo: BankInfo): Boolean {
@@ -55,9 +57,10 @@ open class InMemoryBankFinder() : BankFinderBase(), IBankFinder {
     }
 
 
-    override fun getBankList(): List<BankInfo> {
+    override fun getBankList(maxItems: Int?): List<BankInfo> {
         bankListField?.let {
             return it
+                .max(maxItems) // TODO: stream
         }
 
         val bankList = loadBankList()
@@ -65,6 +68,10 @@ open class InMemoryBankFinder() : BankFinderBase(), IBankFinder {
         this.bankListField = bankList
 
         return bankList
+            .max(maxItems) // TODO: stream
     }
+
+    fun List<BankInfo>.max(maxItems: Int? = null): List<BankInfo> =
+        this.take(maxItems ?: Int.MAX_VALUE)
 
 }

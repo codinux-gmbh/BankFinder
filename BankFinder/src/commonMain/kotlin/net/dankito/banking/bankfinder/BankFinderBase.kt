@@ -3,7 +3,7 @@ package net.dankito.banking.bankfinder
 
 abstract class BankFinderBase : IBankFinder {
 
-    protected abstract fun findBankByNameBankCodeOrCityForNonEmptyQuery(query: String): List<BankInfo>
+    protected abstract fun findBankByNameBankCodeOrCityForNonEmptyQuery(query: String,maxItems: Int? = null): List<BankInfo>
 
     abstract fun searchBankByBic(bic: String): BankInfo?
 
@@ -11,16 +11,16 @@ abstract class BankFinderBase : IBankFinder {
     protected val cachedBanksByBic = mutableMapOf<String, BankInfo?>()
 
 
-    override fun findBankByNameBankCodeOrCity(query: String?): List<BankInfo> {
+    override fun findBankByNameBankCodeOrCity(query: String?, maxItems: Int?): List<BankInfo> {
         if (query.isNullOrBlank()) {
-            return getBankList()
+            return getBankList(maxItems)
         }
 
         if (query.toIntOrNull() != null) { // if query is an integer, then it can only be an bank code, but not a bank name or city
-            return findBankByBankCode(query)
+            return findBankByBankCode(query, maxItems)
         }
 
-        return findBankByNameBankCodeOrCityForNonEmptyQuery(query)
+        return findBankByNameBankCodeOrCityForNonEmptyQuery(query, maxItems)
     }
 
 

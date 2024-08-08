@@ -71,7 +71,7 @@ open class LuceneBankFinder(indexFolder: File) : BankFinderBase(), IBankFinder {
     protected var bankFinderWhileUpdatingIndex: IBankFinder? = null
 
 
-    override fun findBankByBankCode(query: String): List<BankInfo> {
+    override fun findBankByBankCode(query: String, maxItems: Int?): List<BankInfo> {
         bankFinderWhileUpdatingIndex?.let {
             return it.findBankByBankCode(query)
         }
@@ -82,10 +82,10 @@ open class LuceneBankFinder(indexFolder: File) : BankFinderBase(), IBankFinder {
 
         val luceneQuery = queries.startsWith(BankInfoBankCodeFieldName, query)
 
-        return getBanksFromQuery(luceneQuery)
+        return getBanksFromQuery(luceneQuery, maxItems)
     }
 
-    override fun findBankByNameBankCodeOrCityForNonEmptyQuery(query: String): List<BankInfo> {
+    override fun findBankByNameBankCodeOrCityForNonEmptyQuery(query: String, maxItems: Int?): List<BankInfo> {
         bankFinderWhileUpdatingIndex?.let {
             return it.findBankByNameBankCodeOrCity(query)
         }
@@ -99,7 +99,7 @@ open class LuceneBankFinder(indexFolder: File) : BankFinderBase(), IBankFinder {
             )
         }
 
-        return getBanksFromQuery(luceneQuery)
+        return getBanksFromQuery(luceneQuery, maxItems)
     }
 
     override fun searchBankByBic(bic: String): BankInfo? {
@@ -107,21 +107,21 @@ open class LuceneBankFinder(indexFolder: File) : BankFinderBase(), IBankFinder {
             return it.searchBankByBic(bic)
         }
 
-        return getBanksFromQuery(queries.exact(BankInfoBicFieldName, bic)).firstOrNull()
+        return getBanksFromQuery(queries.exact(BankInfoBicFieldName, bic), 1).firstOrNull()
     }
 
 
-    override fun getBankList(): List<BankInfo> {
+    override fun getBankList(maxItems: Int?): List<BankInfo> {
         bankFinderWhileUpdatingIndex?.let {
-            return it.getBankList()
+            return it.getBankList(maxItems)
         }
 
-        return getBanksFromQuery(queries.allDocumentsThatHaveField(BankInfoNameFieldName))
+        return getBanksFromQuery(queries.allDocumentsThatHaveField(BankInfoNameFieldName), maxItems)
     }
 
-    protected open fun getBanksFromQuery(query: Query): List<BankInfo> {
+    protected open fun getBanksFromQuery(query: Query, maxItems: Int?): List<BankInfo> {
         // there are more than 16.000 banks in bank list -> 10.000 is too few
-        return searcher.searchAndMapLazily(MappedSearchConfig(query, BankInfo::class.java, bankInfoProperties, 100_000))
+        return searcher.searchAndMapLazily(MappedSearchConfig(query, BankInfo::class.java, bankInfoProperties, maxItems ?: 100_000))
     }
 
 
