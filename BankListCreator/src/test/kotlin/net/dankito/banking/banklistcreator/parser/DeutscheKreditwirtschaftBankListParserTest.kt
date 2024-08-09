@@ -20,7 +20,7 @@ class DeutscheKreditwirtschaftBankListParserTest {
         val result = underTest.parse(TestConfig.DeutscheKreditwirtschaftBankListXlsxFile)
 
         // then
-        assertThat(result).hasSize(16282)
+        assertThat(result).hasSize(16287)
 
         result.forEach { bankInfo ->
             assertThat(bankInfo.name).isNotEmpty()
