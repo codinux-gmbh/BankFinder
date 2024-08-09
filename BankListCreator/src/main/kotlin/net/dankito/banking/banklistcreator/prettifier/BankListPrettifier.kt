@@ -38,7 +38,9 @@ open class BankListPrettifier {
                 bank.name.contains("Postbank") -> bank.name = "Postbank"
                 bank.name.startsWith("Deutsche Kreditbank") -> bank.name = "DKB (Deutsche Kreditbank)"
                 bank.name.startsWith("Deutsche Bank") || bank.name.startsWith("DB Privat- und Firmenkundenbank") -> bank.name = "Deutsche Bank"
-                bank.name.startsWith("Commerzbank") -> bank.name = "Commerzbank" // TODO: keep "vormals Dresdner Bank"?
+                bank.name.lowercase().contains("comdirect") -> bank.name = "Comdirect"
+                bank.name.startsWith("Commerzbank") -> bank.name = "Commerzbank"
+                bank.bic.startsWith("CSDB") -> bank.name = "Consors"
             }
         }
 
