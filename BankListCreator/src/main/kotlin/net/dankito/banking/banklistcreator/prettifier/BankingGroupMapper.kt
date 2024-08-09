@@ -11,11 +11,13 @@ class BankingGroupMapper {
             name.contains("Sparda") -> BankingGroup.Sparda
             name.contains("PSD") -> BankingGroup.PSD
             name.contains("GLS") -> BankingGroup.GLS
+            // see https://de.wikipedia.org/wiki/Liste_der_Genossenschaftsbanken_in_Deutschland
             name.contains("BBBank") || name.contains("Evangelische Bank") || name.contains("LIGA Bank")
                     || name.contains("Pax") || name.contains("Bank für Kirche und Diakonie") || name.contains("Bank im Bistum Essen")
                     || name.contains("Bank für Schiffahrt") || name.contains("Bank für Kirche")
                 -> BankingGroup.SonstigeGenossenschaftsbank
             lowercase.contains("deutsche kreditbank") -> BankingGroup.DKB
+            // may check against https://de.wikipedia.org/wiki/Liste_der_Sparkassen_in_Deutschland
             lowercase.contains("sparkasse") -> BankingGroup.Sparkasse
             lowercase.contains("comdirect") -> BankingGroup.Comdirect
             lowercase.contains("commerzbank") -> BankingGroup.Commerzbank
