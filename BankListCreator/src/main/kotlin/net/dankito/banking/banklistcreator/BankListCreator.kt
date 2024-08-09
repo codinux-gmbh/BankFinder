@@ -38,7 +38,7 @@ open class BankListCreator @JvmOverloads constructor(
         saveBankListAsJson(allBanks, detailedBankListOutputFile)
         log.info("Wrote ${allBanks.size} detailed bank infos to $detailedBankListOutputFile")
 
-        val mappedBanks = allBanks.map { BankInfo(it.name, it.bankCode, it.bic, it.postalCode, it.city, it.pinTanAddress, it.pinTanVersion) }
+        val mappedBanks = allBanks.map { BankInfo(it.name, it.bankCode, it.bic, it.postalCode, it.city, it.pinTanAddress, it.pinTanVersion, it.bankingGroup) }
         val prettifiedBanks = prettifier.prettify(mappedBanks, prettifyOptions)
         saveBankListAsJson(prettifiedBanks, prettifiedBankListOutputFile)
         log.info("Wrote ${prettifiedBanks.size} prettified bank infos to $prettifiedBankListOutputFile")

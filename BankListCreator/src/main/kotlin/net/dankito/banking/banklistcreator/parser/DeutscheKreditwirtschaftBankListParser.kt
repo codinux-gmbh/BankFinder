@@ -3,6 +3,7 @@ package net.dankito.banking.banklistcreator.parser
 import net.dankito.banking.bankfinder.DetailedBankInfo
 import net.dankito.banking.banklistcreator.parser.model.BankCodeListEntry
 import net.dankito.banking.banklistcreator.parser.model.ServerAddressesListEntry
+import net.dankito.banking.banklistcreator.prettifier.BankingGroupMapper
 import org.docx4j.openpackaging.packages.SpreadsheetMLPackage
 import org.slf4j.LoggerFactory
 import org.xlsx4j.org.apache.poi.ss.usermodel.DataFormatter
@@ -16,7 +17,9 @@ import java.io.File
  * Parses the list of German banks from Deutsche Kreditwirtschaft you can retrieve by registering here:
  * https://www.hbci-zka.de/register/hersteller.htm
  */
-open class DeutscheKreditwirtschaftBankListParser {
+open class DeutscheKreditwirtschaftBankListParser(
+    private val bankingGroupMapper: BankingGroupMapper = BankingGroupMapper()
+) {
 
     companion object {
         private val log = LoggerFactory.getLogger(DeutscheKreditwirtschaftBankListParser::class.java)
@@ -79,7 +82,8 @@ open class DeutscheKreditwirtschaftBankListParser {
             serverAddress?.pinTanAddress,
             serverAddress?.pinTanVersion,
             bank.checksumMethod,
-            bank.oldBankCode
+            bank.oldBankCode,
+            bankingGroupMapper.getBankingGroup(bank.bankName, bank.bic)
         )
     }
 

@@ -10,10 +10,11 @@ open class DetailedBankInfo(
     pinTanAddress: String?,
     pinTanVersion: String?,
     open val checksumMethod: String,
-    open val oldBankCode: String?
-) : BankInfo(name, bankCode, bic, postalCode, city, pinTanAddress, pinTanVersion) {
+    open val oldBankCode: String?,
+    bankingGroup: BankingGroup? = null
+) : BankInfo(name, bankCode, bic, postalCode, city, pinTanAddress, pinTanVersion, bankingGroup) {
 
-    protected constructor() : this("", "", "", "", "", null, "", "", null) // for object deserializers
+    protected constructor() : this("", "", "", "", "", null, "", "", null, null) // for object deserializers
 
 
     open val isBankCodeDeleted: Boolean
