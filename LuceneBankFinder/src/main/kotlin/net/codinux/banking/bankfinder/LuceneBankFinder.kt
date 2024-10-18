@@ -74,7 +74,7 @@ open class LuceneBankFinder(indexFolder: File) : BankFinderBase(), IBankFinder {
 
     override fun findBankByBankCode(query: String, maxItems: Int?): List<BankInfo> {
         bankFinderWhileUpdatingIndex?.let {
-            return it.findBankByBankCode(query)
+            return it.findBankByBankCode(query, maxItems)
         }
 
         if (query.isBlank()) {
@@ -194,7 +194,7 @@ open class LuceneBankFinder(indexFolder: File) : BankFinderBase(), IBankFinder {
         val indexableFields = mutableListOf(
             fields.fullTextSearchField(BankInfoNameFieldName, bank.name, true),
             fields.keywordField(BankInfoBankCodeFieldName, bank.bankCode, true),
-            fields.keywordField(BankInfoBicFieldName, bank.bic, true),
+            fields.nullableKeywordField(BankInfoBicFieldName, bank.bic, true),
             fields.fullTextSearchField(BankInfoCityIndexedFieldName, bank.city, true),
 
             fields.storedField(BankInfoCityStoredFieldName, bank.city),
@@ -214,7 +214,7 @@ open class LuceneBankFinder(indexFolder: File) : BankFinderBase(), IBankFinder {
 
 
     protected open fun calculateCurrentBankListFileHash(): String {
-        return calculateHash(BankListDeserializer().readBankListFile())
+        return calculateHash(BankListLoader().loadBankList())
     }
 
     protected open fun calculateHash(stringToHash: String): String {

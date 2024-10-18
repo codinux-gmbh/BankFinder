@@ -32,7 +32,8 @@ allprojects {
 
 tasks.register("publishAllToMavenLocal") {
     dependsOn(
-        ":BankFinder:publishToMavenLocal"
+        ":BankFinder:publishToMavenLocal",
+        ":LuceneBankFinder:publishToMavenLocal"
     )
 }
 
