@@ -1,5 +1,7 @@
 package net.dankito.banking.bankfinder
 
+import platform.Foundation.*
+
 actual class BankListLoader actual constructor() {
 
     actual fun loadBankList(): String {
@@ -7,7 +9,7 @@ actual class BankListLoader actual constructor() {
 
         val bankListJsonPath = bundle.pathForResource("BankList", "json")!!
 
-        return NSData.dataWithContentsOfFile(bankListJsonPath, NSDataReadingMappedIfSafe, null)!!
+        return NSString.stringWithContentsOfFile(bankListJsonPath) as String
     }
 
 }
