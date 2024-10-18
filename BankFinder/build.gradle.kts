@@ -1,10 +1,12 @@
 plugins {
-    id "org.jetbrains.kotlin.multiplatform"
-    id "maven-publish"
+    kotlin("multiplatform")
+    id("maven-publish")
+
+//    id("dev.icerock.mobile.multiplatform-resources")
 }
 
 
-ext.artifactName = "bank-finder"
+ext["artifactName"] = "bank-finder"
 
 
 kotlin {
@@ -39,12 +41,6 @@ kotlin {
         nodejs()
     }
 
-    wasmJs()
-
-
-    linuxX64()
-    mingwX64()
-
     iosX64()
     iosArm64()
     iosSimulatorArm64()
@@ -58,31 +54,43 @@ kotlin {
     applyDefaultHierarchyTemplate()
 
 
+    val javaUtilsVersion: String by project
+    val slf4jVersion: String by project
+
     sourceSets {
         commonMain {
             dependencies {
-
+//                implementation("dev.icerock.moko:resources:0.24.3")
             }
         }
 
         commonTest {
             dependencies {
-                implementation kotlin("test")
+                implementation(kotlin("test"))
             }
         }
 
 
         jvmMain {
             dependencies {
-                api "net.dankito.utils:java-utils:$javaUtilsVersion"
+                api("net.dankito.utils:java-utils:$javaUtilsVersion")
             }
         }
 
         jvmTest {
             dependencies {
-                implementation "org.slf4j:slf4j-simple:$slf4jVersion"
+                implementation("org.slf4j:slf4j-simple:$slf4jVersion")
             }
 
         }
     }
 }
+
+
+//multiplatformResources {
+//    resourcesPackage.set("net.dankito.banking.bankfinder")
+//    resourcesClassName.set("BankFinderRes")
+//    resourcesVisibility.set(dev.icerock.gradle.MRVisibility.Internal)
+////    iosBaseLocalizationRegion.set("en") // optional, default "en"
+////    iosMinimalDeploymentTarget.set("11.0") // optional, default "9.0"
+//}
