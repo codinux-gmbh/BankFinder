@@ -23,6 +23,10 @@ kotlin {
         }
     }
 
+    js { // TODO: not implemented yet
+        browser()
+    }
+
     iosX64()
     iosArm64()
     iosSimulatorArm64()
