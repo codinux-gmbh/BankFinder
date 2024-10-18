@@ -28,7 +28,7 @@ abstract class BankFinderTestBase {
     fun findBankByNameBankCodeOrCity_Starnberg_MultipleResults() {
 
         // when
-        val result = underTest.findBankByNameBankCodeOrCity("starnberg")
+        val result = underTest.findBankByNameBicBankCodeOrCity("starnberg")
 
         // then
         assertEquals(71, result.size)
@@ -38,7 +38,7 @@ abstract class BankFinderTestBase {
     fun findBankByNameBankCodeOrCity_mizUh_SingleResult() {
 
         // when
-        val result = underTest.findBankByNameBankCodeOrCity("mizUh")
+        val result = underTest.findBankByNameBicBankCodeOrCity("mizUh")
 
         // then
         assertEquals(1, result.size)
@@ -50,7 +50,7 @@ abstract class BankFinderTestBase {
     fun findBankByNameBankCodeOrCity_MultiPartsQuery_BerlinSparkas() {
 
         // when
-        val result = underTest.findBankByNameBankCodeOrCity("Berlin Sparkas")
+        val result = underTest.findBankByNameBicBankCodeOrCity("Berlin Sparkas")
 
         // then
         assertEquals(3, result.size)
@@ -62,7 +62,7 @@ abstract class BankFinderTestBase {
     fun findBankByNameBankCodeOrCity_MultiPartsQuery_SparkasBerlin() {
 
         // when
-        val result = underTest.findBankByNameBankCodeOrCity("Sparkas Berlin")
+        val result = underTest.findBankByNameBicBankCodeOrCity("Sparkas Berlin")
 
         // then
         assertEquals(3, result.size)

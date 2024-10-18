@@ -7,7 +7,7 @@ interface IBankFinder {
 
     fun findBankByBankCode(query: String, maxItems: Int? = null): List<BankInfo>
 
-    fun findBankByNameBankCodeOrCity(query: String?, maxItems: Int? = null): List<BankInfo>
+    fun findBankByNameBicBankCodeOrCity(query: String?, maxItems: Int? = null): List<BankInfo>
 
     fun findBankByBankCode(bankCode: String): BankInfo?
 

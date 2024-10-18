@@ -20,18 +20,18 @@ open class InMemoryBankFinder() : BankFinderBase(), IBankFinder {
             .max(maxItems)
     }
 
-    override fun findBankByNameBankCodeOrCityForNonEmptyQuery(query: String, maxItems: Int?): List<BankInfo> {
+    override fun findBankByNameBicOrCityForNonEmptyQuery(query: String, maxItems: Int?): List<BankInfo> {
         val queryPartsLowerCase = query.lowercase().split(" ", "-")
 
         return getBankList().asSequence().filter { bankInfo ->
-            checkIfAllQueryPartsMatchBankNameBankCodeOrCity(queryPartsLowerCase, bankInfo)
+            checkIfAllQueryPartsMatchBankNameBicOrCity(queryPartsLowerCase, bankInfo)
         }
             .max(maxItems)
     }
 
-    protected open fun checkIfAllQueryPartsMatchBankNameBankCodeOrCity(queryPartsLowerCase: List<String>, bankInfo: BankInfo): Boolean {
+    protected open fun checkIfAllQueryPartsMatchBankNameBicOrCity(queryPartsLowerCase: List<String>, bankInfo: BankInfo): Boolean {
         for (queryPartLowerCase in queryPartsLowerCase) {
-            if (checkIfQueryMatchesBankNameBankCodeOrCity(bankInfo, queryPartLowerCase) == false) {
+            if (checkIfQueryMatchesBankNameBicOrCity(bankInfo, queryPartLowerCase) == false) {
                 return false
             }
         }
@@ -39,12 +39,11 @@ open class InMemoryBankFinder() : BankFinderBase(), IBankFinder {
         return true
     }
 
-    protected open fun checkIfQueryMatchesBankNameBankCodeOrCity(bankInfo: BankInfo, queryLowerCase: String): Boolean {
-        return bankInfo.name.lowercase().contains(queryLowerCase)
-                || bankInfo.bankCode.startsWith(queryLowerCase)
-                || bankInfo.city.lowercase().startsWith(queryLowerCase)
-                || bankInfo.branchesInOtherCities.any { it.lowercase().startsWith(queryLowerCase) }
-    }
+    protected open fun checkIfQueryMatchesBankNameBicOrCity(bankInfo: BankInfo, queryLowerCase: String): Boolean =
+        bankInfo.name.contains(queryLowerCase, true)
+                || bankInfo.bic?.startsWith(queryLowerCase, true) == true
+                || bankInfo.city.startsWith(queryLowerCase, true)
+                || bankInfo.branchesInOtherCities.any { it.startsWith(queryLowerCase, true) }
 
 
     override fun searchBankByBic(bic: String): BankInfo? {

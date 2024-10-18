@@ -20,6 +20,6 @@ class BankFinderResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     fun findBank(@QueryParam("query") query: String? = null, @QueryParam("maxItems") maxItems: Int? = null): List<BankInfo> =
-        bankFinder.findBankByNameBankCodeOrCity(query, maxItems)
+        bankFinder.findBankByNameBicBankCodeOrCity(query, maxItems)
 
 }
