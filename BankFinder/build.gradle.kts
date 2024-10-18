@@ -1,8 +1,8 @@
 plugins {
     kotlin("multiplatform")
-    id("maven-publish")
+    kotlin("plugin.serialization")
 
-//    id("dev.icerock.mobile.multiplatform-resources")
+    id("maven-publish")
 }
 
 
@@ -10,7 +10,7 @@ ext["artifactName"] = "bank-finder"
 
 
 kotlin {
-    jvmToolchain(8)
+    jvmToolchain(11)
 
     compilerOptions {
         // suppresses compiler warning: [EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING] 'expect'/'actual' classes (including interfaces, objects, annotations, enums, and 'actual' typealiases) are in Beta.
@@ -26,21 +26,6 @@ kotlin {
         }
     }
 
-    js {
-        binaries.executable()
-
-        browser {
-            testTask {
-                useKarma {
-                    useChromeHeadless()
-                    useFirefoxHeadless()
-                }
-            }
-        }
-
-        nodejs()
-    }
-
     iosX64()
     iosArm64()
     iosSimulatorArm64()
@@ -54,13 +39,15 @@ kotlin {
     applyDefaultHierarchyTemplate()
 
 
-    val javaUtilsVersion: String by project
-    val slf4jVersion: String by project
+    val kotlinxSerializationVersion: String by project
+    val klfVersion: String by project
 
     sourceSets {
         commonMain {
             dependencies {
-//                implementation("dev.icerock.moko:resources:0.24.3")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerializationVersion")
+
+                implementation("net.codinux.log:klf:$klfVersion")
             }
         }
 
@@ -69,28 +56,5 @@ kotlin {
                 implementation(kotlin("test"))
             }
         }
-
-
-        jvmMain {
-            dependencies {
-                api("net.dankito.utils:java-utils:$javaUtilsVersion")
-            }
-        }
-
-        jvmTest {
-            dependencies {
-                implementation("org.slf4j:slf4j-simple:$slf4jVersion")
-            }
-
-        }
     }
 }
-
-
-//multiplatformResources {
-//    resourcesPackage.set("net.dankito.banking.bankfinder")
-//    resourcesClassName.set("BankFinderRes")
-//    resourcesVisibility.set(dev.icerock.gradle.MRVisibility.Internal)
-////    iosBaseLocalizationRegion.set("en") // optional, default "en"
-////    iosMinimalDeploymentTarget.set("11.0") // optional, default "9.0"
-//}
