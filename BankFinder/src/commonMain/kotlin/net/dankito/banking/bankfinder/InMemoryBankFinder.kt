@@ -51,6 +51,16 @@ open class InMemoryBankFinder() : BankFinderBase(), IBankFinder {
         return getBankList().firstOrNull { it.bic == bic }
     }
 
+    override fun findBankByBankCode(bankCode: String): BankInfo? {
+        val result = getBankList().asSequence().filter { it.bankCode.startsWith(bankCode) }.max(2)
+
+        return if (result.size > 1) { // non unique result, but should actually never happen for BICs
+            null
+        } else {
+            result.firstOrNull()
+        }
+    }
+
 
     override fun preloadBankList() {
         findBankByBankCode("")
@@ -69,7 +79,7 @@ open class InMemoryBankFinder() : BankFinderBase(), IBankFinder {
         return bankList.asSequence().max(maxItems)
     }
 
-    fun Sequence<BankInfo>.max(maxItems: Int? = null): List<BankInfo> =
+    private fun Sequence<BankInfo>.max(maxItems: Int? = null): List<BankInfo> =
         this.take(maxItems ?: Int.MAX_VALUE)
             .toList()
 

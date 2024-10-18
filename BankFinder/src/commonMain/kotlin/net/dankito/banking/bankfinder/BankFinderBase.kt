@@ -8,7 +8,9 @@ abstract class BankFinderBase : IBankFinder {
     abstract fun searchBankByBic(bic: String): BankInfo?
 
 
-    protected val cachedBanksByBic = mutableMapOf<String, BankInfo?>()
+    protected val cachedBanksByBic = mutableMapOf<String, BankInfo?>() // TODO: use a thread-safe Map
+
+    protected val cachedBanksByBankCode = mutableMapOf<String, BankInfo?>() // TODO: use a thread-safe Map
 
 
     override fun findBankByNameBankCodeOrCity(query: String?, maxItems: Int?): List<BankInfo> {
@@ -34,6 +36,28 @@ abstract class BankFinderBase : IBankFinder {
         cachedBanksByBic[bic] = bankForBic
 
         return bankForBic
+    }
+
+    override fun findBankByBicOrIban(bic: String?, iban: String): BankInfo? {
+        if (bic == null || iban.length < 9) {
+            return null
+        }
+
+        return findBankByBic(bic) ?: findBankByIban(iban)
+    }
+
+    override fun findBankByIban(iban: String): BankInfo? {
+        if (iban.length < 9) {
+            return null
+        }
+
+        val bankCode = iban.substring(4) // first two letters are the country code, third and fourth char are the checksum, bank code starts at 5th char
+
+        val bankByBankCode = findBankByBankCode(bankCode)
+
+        cachedBanksByBankCode[bankCode] = bankByBankCode
+
+        return bankByBankCode
     }
 
 

@@ -110,6 +110,14 @@ open class LuceneBankFinder(indexFolder: File) : BankFinderBase(), IBankFinder {
         return getBanksFromQuery(queries.exact(BankInfoBicFieldName, bic), 1).firstOrNull()
     }
 
+    override fun findBankByBankCode(bankCode: String): BankInfo? {
+        (bankFinderWhileUpdatingIndex as? BankFinderBase)?.let {
+            return it.findBankByBankCode(bankCode)
+        }
+
+        return getBanksFromQuery(queries.startsWith(BankInfoBankCodeFieldName, bankCode), 1).firstOrNull()
+    }
+
 
     override fun getBankList(maxItems: Int?): List<BankInfo> {
         bankFinderWhileUpdatingIndex?.let {
