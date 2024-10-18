@@ -1,0 +1,130 @@
+package net.codinux.banking.banklistcreator
+
+import net.codinux.banking.bankfinder.BankInfo
+import net.codinux.banking.bankfinder.DetailedBankInfo
+import net.codinux.banking.banklistcreator.parser.DeutscheKreditwirtschaftBankListParser
+import net.codinux.banking.banklistcreator.prettifier.BankListPrettifier
+import net.codinux.banking.banklistcreator.prettifier.BankListPrettifierOption
+import net.dankito.utils.serialization.JacksonJsonSerializer
+import org.slf4j.LoggerFactory
+import java.io.File
+
+
+open class BankListCreator @JvmOverloads constructor(
+    protected open val parser: DeutscheKreditwirtschaftBankListParser = DeutscheKreditwirtschaftBankListParser(),
+    protected open val prettifier: BankListPrettifier = BankListPrettifier()
+) {
+
+    companion object {
+        private val log = LoggerFactory.getLogger(BankListCreator::class.java)
+    }
+
+
+    open fun createBankListFromDeutscheKreditwirtschaftXlsxFile(deutscheKreditwirtschaftXlsxFile: File,
+                                                                bankListOutputFile: File) {
+
+        val banks = parser.parse(deutscheKreditwirtschaftXlsxFile)
+
+        saveBankListAsJson(banks, bankListOutputFile)
+    }
+
+    open fun createDetailedAndPrettifiedBankListFromDeutscheKreditwirtschaftXlsxFile(
+        deutscheKreditwirtschaftXlsxFile: File, detailedBankListOutputFile: File,
+        prettifiedBankListOutputFile: File, prettifyOptions: List<BankListPrettifierOption>,
+        finTsServerAddressFinderOutputFile: File? = null, bicFinderOutputFile: File? = null) {
+
+        val allBanks = parser.parse(deutscheKreditwirtschaftXlsxFile)
+
+        saveBankListAsJson(allBanks, detailedBankListOutputFile)
+        log.info("Wrote ${allBanks.size} detailed bank infos to $detailedBankListOutputFile")
+
+        val mappedBanks = allBanks.map { BankInfo(it.name, it.bankCode, it.bic, it.postalCode, it.city, it.pinTanAddress, it.pinTanVersion, it.bankingGroup) }
+        val prettifiedBanks = prettifier.prettify(mappedBanks, prettifyOptions)
+        saveBankListAsJson(prettifiedBanks, prettifiedBankListOutputFile)
+        log.info("Wrote ${prettifiedBanks.size} prettified bank infos to $prettifiedBankListOutputFile")
+
+        finTsServerAddressFinderOutputFile?.let {
+            createFinTsServerAddressFinder(allBanks, it)
+        }
+
+        bicFinderOutputFile?.let {
+            createBicFinder(allBanks, it)
+        }
+    }
+
+    open fun saveBankListAsJson(banks: List<BankInfo>, bankListOutputFile: File) {
+        JacksonJsonSerializer().serializeObject(banks, bankListOutputFile)
+    }
+
+
+    protected open fun createFinTsServerAddressFinder(allBanks: List<DetailedBankInfo>, finTsServerAddressFinderOutputFile: File) {
+        val finTsServerAddressByBankCode = allBanks.filterNot { it.pinTanAddress.isNullOrBlank() }.associate { it.bankCode to it.pinTanAddress!! }
+
+        finTsServerAddressFinderOutputFile.parentFile.mkdirs()
+
+        val writer = finTsServerAddressFinderOutputFile.bufferedWriter()
+
+        writer.appendLine("package net.dankito.banking.fints.util")
+        writer.newLine()
+
+        writer.appendLine("open class FinTsServerAddressFinder {")
+        writer.newLine()
+
+        writer.appendLine("\topen fun findFinTsServerAddress(bankCode: String): String? {")
+        writer.appendLine("\t\treturn finTsServerAddressByBankCode[bankCode]")
+        writer.appendLine("\t}")
+        writer.newLine()
+        writer.newLine()
+
+        writer.appendLine("\tprotected open val finTsServerAddressByBankCode: Map<String, String> = mapOf(")
+
+        finTsServerAddressByBankCode.forEach { bankCode, finTsServerAddress ->
+            writer.appendLine("\t\t\"$bankCode\" to \"$finTsServerAddress\",")
+        }
+
+        writer.appendLine("\t)")
+        writer.newLine()
+
+        writer.append("}")
+
+        writer.close()
+
+        log.info("Wrote FinTsServerAddressFinder class to $finTsServerAddressFinderOutputFile")
+    }
+
+    private fun createBicFinder(allBanks: List<DetailedBankInfo>, bicFinderOutputFile: File) {
+        val bicByBankCode = allBanks.filterNot { it.bic.isNullOrBlank() }.associate { it.bankCode to it.bic }
+
+        bicFinderOutputFile.parentFile.mkdirs()
+
+        val writer = bicFinderOutputFile.bufferedWriter()
+
+        writer.appendLine("package net.dankito.banking.fints.util")
+        writer.newLine()
+
+        writer.appendLine("open class BicFinder {")
+        writer.newLine()
+
+        writer.appendLine("\topen fun findBic(bankCode: String): String? {")
+        writer.appendLine("\t\treturn bicByBankCode[bankCode]")
+        writer.appendLine("\t}")
+        writer.newLine()
+        writer.newLine()
+
+        writer.appendLine("\tprotected open val bicByBankCode: Map<String, String> = mapOf(")
+
+        bicByBankCode.forEach { bankCode, bic ->
+            writer.appendLine("\t\t\"$bankCode\" to \"$bic\",")
+        }
+
+        writer.appendLine("\t)")
+        writer.newLine()
+
+        writer.append("}")
+
+        writer.close()
+
+        log.info("Wrote BicFinder class to $bicByBankCode")
+    }
+
+}
