@@ -56,12 +56,10 @@ open class InMemoryBankFinder() : BankFinderBase(), IBankFinder {
             return false
         }
 
-        val effectiveBic = if (bic.length == 11 && bic.endsWith("XXX")) bic.substring(0, 8)
-                        else bic
-        val effectiveQuery = if (query.length == 11 && query.endsWith("XXX", true)) query.substring(0, 8)
+        val normalizedQuery = if (query.length == 11 && query.endsWith("XXX", true)) query.substring(0, 8)
                             else query
 
-        return effectiveBic.equals(effectiveQuery, true)
+        return bic.startsWith(normalizedQuery, true)
     }
 
     override fun findBankByBankCode(bankCode: String): BankInfo? {
