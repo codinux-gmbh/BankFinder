@@ -6,9 +6,6 @@ plugins {
 }
 
 
-ext["artifactName"] = "bank-finder"
-
-
 kotlin {
     jvmToolchain(11)
 
@@ -58,3 +55,9 @@ kotlin {
         }
     }
 }
+
+
+
+ext["customArtifactId"] = "bank-finder"
+
+apply(from = "../gradle/scripts/publish-codinux.gradle.kts")

@@ -10,22 +10,17 @@ buildscript {
 
     dependencies {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
-
-        classpath("dev.icerock.moko:resources-generator:0.24.3")
     }
 }
 
 
-// TODO: fix publishing
-//def commonScriptsFile = new File(new File(project.gradle.gradleUserHomeDir, "scripts"), "commonScripts.gradle")
-//if (commonScriptsFile.exists()) {
-//    apply from: commonScriptsFile
-//}
-
-
 allprojects {
     group = "net.codinux.banking"
-    version = "1.0.0-SNAPSHOT"
+    version = "0.5.0-SNAPSHOT"
+
+    ext["projectDescription"] = "Library to find German banks"
+    ext["sourceCodeRepositoryBaseUrl"] = "github.com/codinux-gmbh/BankFinder"
+
 
     repositories {
         mavenCentral()
@@ -34,6 +29,18 @@ allprojects {
 }
 
 
+
+tasks.register("publishAllToMavenLocal") {
+    dependsOn(
+        ":BankFinder:publishToMavenLocal"
+    )
+}
+
+tasks.register("publishAll") {
+    dependsOn(
+        ":BankFinder:publish"
+    )
+}
 
 tasks.register("jarAll") {
     dependsOn(
