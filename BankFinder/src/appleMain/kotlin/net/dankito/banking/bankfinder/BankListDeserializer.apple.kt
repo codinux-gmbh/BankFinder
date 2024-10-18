@@ -5,7 +5,6 @@ import net.dankito.utils.multiplatform.getStringOrEmpty
 import net.dankito.utils.multiplatform.toList
 import platform.Foundation.*
 
-
 actual class BankListDeserializer {
 
     actual fun loadBankList(): List<BankInfo> {

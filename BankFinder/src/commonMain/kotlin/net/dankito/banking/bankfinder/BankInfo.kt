@@ -1,9 +1,9 @@
 package net.dankito.banking.bankfinder
 
-import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonInclude
-
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+//import com.fasterxml.jackson.annotation.JsonIgnore
+//import com.fasterxml.jackson.annotation.JsonInclude
+//
+//@JsonInclude(JsonInclude.Include.NON_EMPTY)
 open class BankInfo(
     open var name: String,
     open val bankCode: String,
@@ -19,11 +19,11 @@ open class BankInfo(
     protected constructor() : this("", "", "", "", "", null, "") // for object deserializers
 
 
-    @get:JsonIgnore
+//    @get:JsonIgnore
     open val supportsPinTan: Boolean
         get() = pinTanAddress.isNullOrEmpty() == false
 
-    @get:JsonIgnore
+//    @get:JsonIgnore
     open val supportsFinTs3_0: Boolean
         get() = pinTanVersion == "FinTS V3.0"
 

@@ -8,37 +8,54 @@ ext.artifactName = "bank-finder"
 
 
 kotlin {
+    jvmToolchain(8)
+
+    compilerOptions {
+        // suppresses compiler warning: [EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING] 'expect'/'actual' classes (including interfaces, objects, annotations, enums, and 'actual' typealiases) are in Beta.
+        freeCompilerArgs.add("-Xexpect-actual-classes")
+    }
+
+
     jvm {
-        jvmToolchain(8)
         withJava()
+
         testRuns["test"].executionTask.configure {
             useJUnitPlatform()
         }
     }
 
-//    js(BOTH) {
-//        browser {
-//            commonWebpackConfig {
-//                cssSupport.enabled = true
-//            }
-//        }
-//    }
+    js {
+        binaries.executable()
 
-    ios {
-        binaries {
-            framework {
-                baseName = "BankFinder"
+        browser {
+            testTask {
+                useKarma {
+                    useChromeHeadless()
+                    useFirefoxHeadless()
+                }
             }
         }
+
+        nodejs()
     }
 
-//    def hostOs = System.getProperty("os.name")
-//    def isMingwX64 = hostOs.startsWith("Windows")
-//    def nativeTarget
-//    if (hostOs == "Mac OS X") nativeTarget = macosX64('native') { binaries.executable() }
-//    else if (hostOs == "Linux") nativeTarget = linuxX64("native") { binaries.executable() }
-//    else if (isMingwX64) nativeTarget = mingwX64("native") { binaries.executable() }
-//    else throw new GradleException("Host OS is not supported in Kotlin/Native.")
+    wasmJs()
+
+
+    linuxX64()
+    mingwX64()
+
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
+    macosX64()
+    macosArm64()
+    watchosArm64()
+    watchosSimulatorArm64()
+    tvosArm64()
+    tvosSimulatorArm64()
+
+    applyDefaultHierarchyTemplate()
 
 
     sourceSets {
@@ -50,8 +67,7 @@ kotlin {
 
         commonTest {
             dependencies {
-                implementation kotlin("test-common")
-                implementation kotlin("test-annotations-common")
+                implementation kotlin("test")
             }
         }
 
@@ -64,27 +80,9 @@ kotlin {
 
         jvmTest {
             dependencies {
-                implementation kotlin("test-junit")
-
-                implementation "org.junit.jupiter:junit-jupiter:$junitVersion"
-                runtimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
-
                 implementation "org.slf4j:slf4j-simple:$slf4jVersion"
             }
 
-        }
-
-
-        iosMain {
-            dependencies {
-
-            }
-        }
-
-        iosTest {
-            dependencies {
-
-            }
         }
     }
 }
