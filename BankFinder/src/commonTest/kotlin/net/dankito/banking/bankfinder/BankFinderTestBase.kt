@@ -2,6 +2,7 @@ package net.dankito.banking.bankfinder
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 
 abstract class BankFinderTestBase {
@@ -19,8 +20,9 @@ abstract class BankFinderTestBase {
         val result = underTest.findBankByBankCode("10000000")
 
         // then
-        assertEquals(1, result.size)
-        assertEquals("Bundesbank", result[0].name)
+        assertNotNull(result)
+
+        assertEquals("Bundesbank", result.name)
     }
 
 
@@ -68,6 +70,19 @@ abstract class BankFinderTestBase {
         assertEquals(3, result.size)
 
         assertEquals("Landesbank Berlin - Berliner Sparkasse", result.first().name)
+    }
+
+    @Test
+    fun findBankWithBicThatEndsWithXXXWithoutSearchingForXXX() {
+
+        // when
+        val result = underTest.findBankByBic("HELADEFF") // Hessische Landesbank has BIC HELADEFFXXX, find it without 'XXX'
+
+        // then
+        assertNotNull(result)
+
+        assertEquals("Landesbank Hessen-Thür Girozentrale", result.name)
+        assertEquals("HELADEFFXXX", result.bic)
     }
 
 }
