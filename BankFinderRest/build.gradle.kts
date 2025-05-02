@@ -9,6 +9,7 @@ repositories {
 }
 
 val quarkusVersion: String by project
+val klfVersion: String by project
 val lokiLoggerVersion: String by project
 
 dependencies {
@@ -24,9 +25,9 @@ dependencies {
 
     implementation(project(":BankFinder"))
 
+    implementation("net.codinux.log:klf:$klfVersion")
     implementation("net.codinux.log:quarkus-loki-log-appender:$lokiLoggerVersion")
     implementation("net.codinux.log.kubernetes:codinux-kubernetes-info-retriever:$lokiLoggerVersion")
-    implementation("net.codinux.log:kmp-log:1.1.3")
 
     testImplementation("io.quarkus:quarkus-junit5")
     testImplementation("io.rest-assured:rest-assured")
