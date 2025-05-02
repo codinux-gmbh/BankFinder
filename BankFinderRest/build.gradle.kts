@@ -14,12 +14,12 @@ val lokiLoggerVersion: String by project
 dependencies {
     implementation(enforcedPlatform("io.quarkus.platform:quarkus-bom:$quarkusVersion"))
     implementation("io.quarkus:quarkus-kotlin")
+
     implementation("io.quarkus:quarkus-resteasy")
     implementation("io.quarkus:quarkus-resteasy-jackson")
 
     implementation("io.quarkus:quarkus-smallrye-openapi")
     implementation("io.quarkus:quarkus-smallrye-health")
-    implementation("io.quarkus:quarkus-micrometer")
     implementation("io.quarkus:quarkus-micrometer-registry-prometheus")
 
     implementation(project(":BankFinder"))
