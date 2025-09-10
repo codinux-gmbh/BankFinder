@@ -16,7 +16,7 @@ buildscript {
 
 allprojects {
     group = "net.codinux.banking"
-    version = "0.5.0-SNAPSHOT"
+    version = "0.5.0"
 
     ext["projectDescription"] = "Library to find German banks"
     ext["sourceCodeRepositoryBaseUrl"] = "github.com/codinux-gmbh/BankFinder"
