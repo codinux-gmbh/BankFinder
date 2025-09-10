@@ -40,4 +40,4 @@ dependencies {
 
 ext["customArtifactId"] = "lucene-bank-finder"
 
-apply(from = "../gradle/scripts/publish-codinux.gradle.kts")
+apply(from = "../gradle/scripts/publish-codinux-repo.gradle.kts")
